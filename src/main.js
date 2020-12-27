@@ -20,11 +20,28 @@ class Blog {
 
         this.blogList.addEventListener("click", ({target}) => {
             const targetClassName = target.className;
-            if (targetClassName === "like") {
-                const postTitle = target.previousElementSibling.textContent;
-                this.likedSet.add(postTitle)
+            const postTitle = target.previousElementSibling.textContent;
+
+            if (targetClassName === "unlike") {
+                this.likedSet.delete(postTitle)
+                target.className = "like"
             }
+
+            if (targetClassName === "like") {
+                this.likedSet.add(postTitle)
+                target.className = "unlike"
+            }
+            this.updateLikedList();
         });
+    }
+
+    updateLikedList(){
+        const ul = document.querySelector(".like-list > ul");
+        let likedList = "";
+        this.likedSet.forEach((value) => {
+            likedList += `<li>${value}</li>`
+        })
+        ul.innerHTML = likedList;
     }
 
     setInitData(dataURL) {
