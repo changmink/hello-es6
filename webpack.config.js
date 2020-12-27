@@ -4,7 +4,7 @@ module.exports = {
 	entry: './src/index.js',
 	output: {
 		filename: 'bundle.js',
-		path:path.resolve(__dirname, 'dist')
+		path:path.resolve(__dirname, 'dist'),
 	},
 	module: {
 		rules: [{
@@ -22,5 +22,12 @@ module.exports = {
 				}
 			}
 		}]
+	},
+	devServer : {
+		contentBase: path.join(__dirname, ''),
+		publicPath: '/dist',
+    	compress: true,
+    	port: 9000,
+		inline: true
 	}
 }
