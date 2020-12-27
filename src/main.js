@@ -1,12 +1,34 @@
 class Blog {
     constructor(args) {
         console.log('Blog is started!')
+        this.setInitVariables();
+        this.registerEvents();
+        this.likedSet = new Set();
+    }
+
+    setInitVariables() {
+        this.blogList = document.querySelector(".blogList > ul")
+    }
+
+    registerEvents() {
+        const startBtn = document.querySelector(".start")
         const dataURL = "src/data/data.json"
-        this.setInitData(dataURL);
+
+        startBtn.addEventListener("click", () => {
+            this.setInitData(dataURL);
+        })
+
+        this.blogList.addEventListener("click", ({target}) => {
+            const targetClassName = target.className;
+            if (targetClassName === "like") {
+                const postTitle = target.previousElementSibling.textContent;
+                this.likedSet.add(postTitle)
+            }
+        });
     }
 
     setInitData(dataURL) {
-        this.getData(dataURL, this.insertPosts);
+        this.getData(dataURL, this.insertPosts.bind(this));
     }
 
     getData(dataURL, func) {
@@ -21,10 +43,12 @@ class Blog {
     }
 
     insertPosts(list) {
-        const ul = document.querySelector(".blogList > ul");
         list.forEach((v) => {
-            ul.innerHTML += `
-                <li><a href=${v.link}> ${v.title}</a></li>
+            this.blogList.innerHTML += `
+                <li>
+                    <a href=${v.link}> ${v.title}</a>
+                    <div class="like">찜하기</div>
+                </li>
             `;
         })
     }
